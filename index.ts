@@ -110,7 +110,7 @@ let args = [
 	(flags && '-' + flags),
 ];
 
-console.log(args);
+//console.log(args);
 
 crossSpawn.sync(cli.argv.npmClient, args, {
 	stdio: 'inherit',
