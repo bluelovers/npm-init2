@@ -108,7 +108,7 @@ let flags = Object.keys(cli.argv)
 let args = [
 	'init',
 	(flags && '-' + flags),
-];
+].filter(v => v);
 
 //console.log(args);
 

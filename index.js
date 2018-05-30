@@ -75,7 +75,7 @@ let flags = Object.keys(cli.argv)
 let args = [
     'init',
     (flags && '-' + flags),
-];
+].filter(v => v);
 crossSpawn.sync(cli.argv.npmClient, args, {
     stdio: 'inherit',
     cwd: targetDir,
