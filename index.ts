@@ -10,7 +10,7 @@ import * as path from 'path';
 import { sortPackageJson } from 'sort-package-json2';
 import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
-import { fixBinPath } from 'package-json-loader/util';
+import { fixBinPath } from 'npm-package-json-loader/util';
 
 let cli = yargs
 	.default({
@@ -44,6 +44,9 @@ let cli = yargs
 	})
 	.option('force', {
 		alias: ['f'],
+		type: 'boolean',
+	})
+	.option('sort', {
 		type: 'boolean',
 	})
 	.option('private', {

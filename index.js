@@ -36,6 +36,9 @@ let cli = yargs
     alias: ['f'],
     type: 'boolean',
 })
+    .option('sort', {
+    type: 'boolean',
+})
     .option('private', {
     alias: ['p'],
     type: 'boolean',
