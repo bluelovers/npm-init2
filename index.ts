@@ -9,6 +9,8 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { sortPackageJson } from 'sort-package-json2';
 import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
+import PackageJsonLoader from 'npm-package-json-loader';
+import { fixBinPath } from 'package-json-loader/util';
 
 let cli = yargs
 	.default({
@@ -118,30 +120,24 @@ crossSpawn.sync(cli.argv.npmClient, args, {
 });
 
 {
-	let pkg;
-	let file = path.join(targetDir, 'package.json');
+	let pkg = new PackageJsonLoader(path.join(targetDir, 'package.json'));
 
-	if (fs.existsSync(file))
+	if (pkg.exists())
 	{
 		if (cli.argv.p && cli.argv.npmClient != 'yarn')
 		{
-			pkg = pkg || fs.readJSONSync(file);
-
-			pkg.private = true;
+			pkg.data.private = true;
 		}
+
+		pkg.autofix();
 
 		if (cli.argv.sort)
 		{
-			pkg = pkg || fs.readJSONSync(file);
-
-			pkg = sortPackageJson(pkg);
+			pkg.sort();
 		}
 
-		if (pkg)
-		{
-			fs.writeJSONSync(file, pkg, {
-				spaces: 2,
-			});
-		}
+		pkg.writeWhenLoaded();
 	}
 }
+
+

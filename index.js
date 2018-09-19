@@ -5,8 +5,8 @@ const yargs = require("yargs");
 const crossSpawn = require("cross-spawn");
 const fs = require("fs-extra");
 const path = require("path");
-const sort_package_json2_1 = require("sort-package-json2");
 const workspaces_config_1 = require("workspaces-config");
+const npm_package_json_loader_1 = require("npm-package-json-loader");
 let cli = yargs
     .default({})
     .option('npmClient', {
@@ -81,21 +81,15 @@ crossSpawn.sync(cli.argv.npmClient, args, {
     cwd: targetDir,
 });
 {
-    let pkg;
-    let file = path.join(targetDir, 'package.json');
-    if (fs.existsSync(file)) {
+    let pkg = new npm_package_json_loader_1.default(path.join(targetDir, 'package.json'));
+    if (pkg.exists()) {
         if (cli.argv.p && cli.argv.npmClient != 'yarn') {
-            pkg = pkg || fs.readJSONSync(file);
-            pkg.private = true;
+            pkg.data.private = true;
         }
+        pkg.autofix();
         if (cli.argv.sort) {
-            pkg = pkg || fs.readJSONSync(file);
-            pkg = sort_package_json2_1.sortPackageJson(pkg);
+            pkg.sort();
         }
-        if (pkg) {
-            fs.writeJSONSync(file, pkg, {
-                spaces: 2,
-            });
-        }
+        pkg.writeWhenLoaded();
     }
 }
