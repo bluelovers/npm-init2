@@ -1,6 +1,6 @@
 {
   "name": "npm-init2",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "private": false,
   "description": "a lazy npm init for create new package, support yarn workspace. make we without use `mkdir xxx && cd xxx && [npm|yarn] init` with `npx npm-init2 xxx`",
   "keywords": [
@@ -35,13 +35,14 @@
   },
   "config": {},
   "dependencies": {
-    "cross-spawn": "^6.0.5",
+    "cross-spawn-extra": "^1.0.3",
     "find-yarn-workspace-root": "^1.2.1",
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^7.0.1",
+    "json5": "^2.1.0",
     "npm-package-json-loader": "^1",
-    "sort-package-json2": "^0.0.3",
+    "update-notifier": "^2.5.0",
     "workspaces-config": "^1.0.1",
-    "yargs": "^12.0.2"
+    "yargs": "^12.0.5"
   },
   "devDependencies": {},
   "peerDependencies": {},

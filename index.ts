@@ -4,13 +4,15 @@
 
 import * as findYarnWorkspaceRoot from 'find-yarn-workspace-root';
 import * as yargs from 'yargs';
-import * as crossSpawn from 'cross-spawn';
+import * as crossSpawn from 'cross-spawn-extra';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { sortPackageJson } from 'sort-package-json2';
 import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
-import { fixBinPath } from 'npm-package-json-loader/util';
+import updateNotifier = require('update-notifier');
+import pkg = require( './package.json' );
+
+updateNotifier({ pkg }).notify();
 
 let cli = yargs
 	.default({
@@ -35,7 +37,7 @@ let cli = yargs
 		requiresArg: true,
 		normalize: true,
 //		default: process.cwd(),
-		defaultDescription: '.',
+		defaultDescription: process.cwd(),
 		type: 'string',
 	})
 	.option('skipCheckWorkspace', {
@@ -48,10 +50,18 @@ let cli = yargs
 	})
 	.option('sort', {
 		type: 'boolean',
+		default: true,
 	})
 	.option('private', {
 		alias: ['p'],
 		type: 'boolean',
+	})
+	.option('createModule', {
+		alias: ['m'],
+		type: 'string',
+	})
+	.option('name', {
+		type: 'string',
 	})
 ;
 
@@ -67,10 +77,28 @@ if (!cli.argv.skipCheckWorkspace)
 }
 
 let targetDir: string;
+let targetName: string = cli.argv.name || null;
 
 if (argv.length)
 {
 	let name: string = argv[0];
+
+	if (/^(?:@([^/]+?)[/])([^/]+)$/i.test(name))
+	{
+		targetName = targetName || name;
+		name = name
+			.replace(/[\/\\]+/g, '_')
+			.replace(/^@/g, '')
+		;
+	}
+	else if (/^[^/@]+$/i.test(name))
+	{
+		targetName = targetName || null;
+	}
+	else
+	{
+		targetName = targetName || null;
+	}
 
 	if (hasWorkspace)
 	{
@@ -113,15 +141,17 @@ let flags = Object.keys(cli.argv)
 let args = [
 	'init',
 	(flags && '-' + flags),
+	cli.argv.createModule,
 ].filter(v => v);
 
 //console.log(args);
 
-crossSpawn.sync(cli.argv.npmClient, args, {
+let cp = crossSpawn.sync(cli.argv.npmClient, args, {
 	stdio: 'inherit',
 	cwd: targetDir,
 });
 
+if (!cp.error)
 {
 	let pkg = new PackageJsonLoader(path.join(targetDir, 'package.json'));
 
@@ -132,6 +162,16 @@ crossSpawn.sync(cli.argv.npmClient, args, {
 			pkg.data.private = true;
 		}
 
+		if (targetName && pkg.data.name != targetName)
+		{
+			pkg.data.name = targetName;
+		}
+
+		if (pkg.data.name && /^@/.test(pkg.data.name) && !pkg.data.publishConfig)
+		{
+			//pkg.data.publishConfig = {};
+		}
+
 		pkg.autofix();
 
 		if (cli.argv.sort)
@@ -140,7 +180,19 @@ crossSpawn.sync(cli.argv.npmClient, args, {
 		}
 
 		pkg.writeWhenLoaded();
+
+		/*
+		fs.copySync(path.join(__dirname, 'lib/static'), targetDir, {
+			overwrite: false,
+			preserveTimestamps: true,
+			errorOnExist: false,
+		});
+		*/
+
+		fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), {
+			overwrite: false,
+			preserveTimestamps: true,
+			errorOnExist: false,
+		});
 	}
 }
-
-
