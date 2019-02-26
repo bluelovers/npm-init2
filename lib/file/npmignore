@@ -8,12 +8,11 @@
 *.old
 *.log
 tsconfig.json
-#package-lock.json
+package-lock.json
 test
 .github
 .gitkeep
 /.*
-#package-lock.json
 tests
 /~*
 __test__
@@ -25,3 +24,6 @@ __tests__
 !*.d.ts
 /bin/**/*.d.ts
 /bin/*.d.ts
+
+*.tgz
+/tsconfig.json.tpl

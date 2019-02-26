@@ -61,6 +61,9 @@ let cli = yargs
 })
     .option('name', {
     type: 'string',
+})
+    .option('copyStatic', {
+    type: 'boolean',
 });
 let argv = cli.argv._;
 let cwd = path.resolve(cli.argv.cwd || process.cwd());
@@ -135,13 +138,11 @@ if (!cp.error) {
             pkg.sort();
         }
         pkg.writeWhenLoaded();
-        /*
         fs.copySync(path.join(__dirname, 'lib/static'), targetDir, {
             overwrite: false,
             preserveTimestamps: true,
             errorOnExist: false,
         });
-        */
         fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), {
             overwrite: false,
             preserveTimestamps: true,
@@ -149,3 +150,4 @@ if (!cp.error) {
         });
     }
 }
+//# sourceMappingURL=index.js.map

@@ -26,3 +26,6 @@ test
 /bin/*.d.ts
 !/lib/static/*
 !/lib/static/.npmignore
+*.tgz
+
+!/lib/static/tsconfig.json.tpl

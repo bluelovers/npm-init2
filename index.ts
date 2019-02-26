@@ -2,11 +2,11 @@
  * Created by user on 2018/5/14/014.
  */
 
-import * as findYarnWorkspaceRoot from 'find-yarn-workspace-root';
-import * as yargs from 'yargs';
-import * as crossSpawn from 'cross-spawn-extra';
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import findYarnWorkspaceRoot = require('find-yarn-workspace-root');
+import yargs  = require('yargs');
+import crossSpawn = require('cross-spawn-extra');
+import fs = require('fs-extra');
+import path  = require('path');
 import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
 import updateNotifier = require('update-notifier');
@@ -62,6 +62,9 @@ let cli = yargs
 	})
 	.option('name', {
 		type: 'string',
+	})
+	.option('copyStatic', {
+		type: 'boolean',
 	})
 ;
 
@@ -181,13 +184,11 @@ if (!cp.error)
 
 		pkg.writeWhenLoaded();
 
-		/*
 		fs.copySync(path.join(__dirname, 'lib/static'), targetDir, {
 			overwrite: false,
 			preserveTimestamps: true,
 			errorOnExist: false,
 		});
-		*/
 
 		fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), {
 			overwrite: false,

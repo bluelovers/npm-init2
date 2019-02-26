@@ -2,7 +2,7 @@
  * Created by user on 2018/11/28/028.
  */
 
-import * as crossSpawn from 'cross-spawn-extra';
+import crossSpawn = require('cross-spawn-extra');
 import JSON5 = require('json5')
 
 export function npmVersion(npmClient?: string, cwd?: string)

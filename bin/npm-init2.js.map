@@ -1,0 +1,1 @@
+{"version":3,"file":"npm-init2.js","sourceRoot":"","sources":["npm-init2.ts"],"names":[],"mappings":";;;AAEA,cAAY","sourcesContent":["#!/usr/bin/env node\n\nimport '..';\n\n\n"]}
