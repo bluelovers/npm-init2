@@ -43,4 +43,6 @@ bin/*.d.ts
 /packages/**/node_modules
 
 *.tgz
+/tsconfig.json.tpl
 
+yarn-error.log
