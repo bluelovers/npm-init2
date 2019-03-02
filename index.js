@@ -148,6 +148,11 @@ if (!cp.error) {
             preserveTimestamps: true,
             errorOnExist: false,
         });
+        fs.copySync(path.join(__dirname, 'lib/file/gitignore'), path.join(targetDir, '.gitignore'), {
+            overwrite: false,
+            preserveTimestamps: true,
+            errorOnExist: false,
+        });
     }
 }
 //# sourceMappingURL=index.js.map
