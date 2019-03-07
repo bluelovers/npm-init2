@@ -29,3 +29,4 @@ __tests__
 /tsconfig.json.tpl
 
 yarn-error.log
+.git

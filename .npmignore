@@ -28,4 +28,4 @@ test
 !/lib/static/.npmignore
 *.tgz
 
-!/lib/static/tsconfig.json.tpl
+!lib/file/tsconfig.json.tpl

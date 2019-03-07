@@ -138,21 +138,21 @@ if (!cp.error) {
             pkg.sort();
         }
         pkg.writeWhenLoaded();
-        fs.copySync(path.join(__dirname, 'lib/static'), targetDir, {
+        let copyOptions = {
             overwrite: false,
             preserveTimestamps: true,
             errorOnExist: false,
-        });
-        fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), {
-            overwrite: false,
-            preserveTimestamps: true,
-            errorOnExist: false,
-        });
-        fs.copySync(path.join(__dirname, 'lib/file/gitignore'), path.join(targetDir, '.gitignore'), {
-            overwrite: false,
-            preserveTimestamps: true,
-            errorOnExist: false,
-        });
+        };
+        try {
+            fs.copySync(path.join(__dirname, 'lib/static'), targetDir, copyOptions);
+        }
+        catch (e) {
+        }
+        fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), copyOptions);
+        fs.copySync(path.join(__dirname, 'lib/file/gitignore'), path.join(targetDir, '.gitignore'), copyOptions);
+        if (!fs.pathExistsSync(path.join(targetDir, 'tsconfig.json'))) {
+            fs.copySync(path.join(__dirname, 'lib/file/tsconfig.json.tpl'), path.join(targetDir, 'tsconfig.json.tpl'), copyOptions);
+        }
     }
 }
 //# sourceMappingURL=index.js.map

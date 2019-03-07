@@ -18,12 +18,14 @@ test/**/*.d.ts
 test/*.js
 test/*.d.ts
 test/temp*
+test/**/*.map
 
 tests/**/*.js
 tests/**/*.d.ts
 tests/*.js
 tests/*.d.ts
 tests/temp*
+tests/**/*.map
 
 bin/*.d.ts
 
@@ -46,3 +48,6 @@ bin/*.d.ts
 /tsconfig.json.tpl
 
 yarn-error.log
+
+/*.log
+.git
