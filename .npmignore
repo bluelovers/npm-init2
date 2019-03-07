@@ -29,3 +29,5 @@ test
 *.tgz
 
 !lib/file/tsconfig.json.tpl
+/tsconfig.json.tpl
+!lib/static/tsconfig.json.tpl

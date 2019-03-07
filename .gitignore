@@ -23,5 +23,7 @@ tests/**/*.d.ts
 tests/*.js
 tests/*.d.ts
 tests/temp*
-!/packages/npm-init2/lib/static/tsconfig.json.tpl
+!lib/static/tsconfig.json.tpl
 *.tgz
+/tsconfig.json.tpl
+!lib/file/tsconfig.json.tpl
