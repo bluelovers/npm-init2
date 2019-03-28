@@ -12,6 +12,7 @@ const workspaces_config_1 = require("workspaces-config");
 const npm_package_json_loader_1 = require("npm-package-json-loader");
 const updateNotifier = require("update-notifier");
 const pkg = require("./package.json");
+const index_1 = require("./lib/index");
 updateNotifier({ pkg }).notify();
 let cli = yargs
     .default({
@@ -71,36 +72,68 @@ let hasWorkspace;
 if (!cli.argv.skipCheckWorkspace) {
     hasWorkspace = findYarnWorkspaceRoot(cwd);
 }
-let targetDir;
-let targetName = cli.argv.name || null;
-if (argv.length) {
-    let name = argv[0];
-    if (/^(?:@([^/]+?)[/])([^/]+)$/i.test(name)) {
+let workspacePrefix;
+if (hasWorkspace) {
+    let ws = workspaces_config_1.parseStaticPackagesPaths(workspaces_config_1.default(hasWorkspace));
+    if (ws.prefix.length) {
+        workspacePrefix = ws.prefix[0];
+    }
+}
+let { targetDir, targetName } = index_1.getTargetDir({
+    inputName: argv.length && argv[0],
+    cwd,
+    targetName: cli.argv.name || null,
+    hasWorkspace,
+    workspacePrefix,
+});
+/*
+
+let targetDir: string;
+let targetName: string = cli.argv.name || null;
+
+if (argv.length)
+{
+    let name: string = argv[0];
+
+    if (/^(?:@([^/]+?)[/])([^/]+)$/i.test(name))
+    {
         targetName = targetName || name;
         name = name
             .replace(/[\/\\]+/g, '_')
-            .replace(/^@/g, '');
+            .replace(/^@/g, '')
+        ;
     }
-    else if (/^[^/@]+$/i.test(name)) {
+    else if (/^[^/@]+$/i.test(name))
+    {
         targetName = targetName || null;
     }
-    else {
+    else
+    {
         targetName = targetName || null;
     }
-    if (hasWorkspace) {
-        let ws = workspaces_config_1.parseStaticPackagesPaths(workspaces_config_1.default(hasWorkspace));
-        if (ws.prefix.length) {
+
+    if (hasWorkspace)
+    {
+        let ws = parseStaticPackagesPaths(getConfig(hasWorkspace));
+
+        if (ws.prefix.length)
+        {
             name = path.join(hasWorkspace, ws.prefix[0], name);
         }
-        else {
+        else
+        {
             throw new RangeError();
         }
     }
+
     targetDir = path.resolve(name);
 }
-else {
+else
+{
     targetDir = cwd;
 }
+
+*/
 //console.log(targetDir);
 fs.ensureDirSync(targetDir);
 let flags = Object.keys(cli.argv)

@@ -11,6 +11,7 @@ import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
 import updateNotifier = require('update-notifier');
 import pkg = require( './package.json' );
+import { getTargetDir } from './lib/index';
 
 updateNotifier({ pkg }).notify();
 
@@ -79,6 +80,28 @@ if (!cli.argv.skipCheckWorkspace)
 	hasWorkspace = findYarnWorkspaceRoot(cwd);
 }
 
+let workspacePrefix: string;
+
+if (hasWorkspace)
+{
+	let ws = parseStaticPackagesPaths(getConfig(hasWorkspace));
+
+	if (ws.prefix.length)
+	{
+		workspacePrefix = ws.prefix[0];
+	}
+}
+
+let { targetDir, targetName } = getTargetDir({
+	inputName: argv.length && argv[0],
+	cwd,
+	targetName: cli.argv.name || null,
+	hasWorkspace,
+	workspacePrefix,
+});
+
+/*
+
 let targetDir: string;
 let targetName: string = cli.argv.name || null;
 
@@ -123,6 +146,8 @@ else
 {
 	targetDir = cwd;
 }
+
+*/
 
 //console.log(targetDir);
 
