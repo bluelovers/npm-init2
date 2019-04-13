@@ -42,12 +42,18 @@ bin/*.d.ts
 /packages/*/tests/*.d.ts
 /packages/*/tests/temp*
 
-/packages/**/node_modules
+/packages/*/bin/*.d.ts
+
+**/node_modules
 
 *.tgz
 /tsconfig.json.tpl
+!tsconfig.json
 
 yarn-error.log
 
 /*.log
 .git
+yarn.lock
+
+*.tgz

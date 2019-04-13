@@ -30,3 +30,5 @@ __tests__
 
 yarn-error.log
 .git
+yarn.lock
+*.tgz
