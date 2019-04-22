@@ -68,6 +68,6 @@ yarn-error.log*
 *.sln
 *.sw?
 
-.vue.js
-.vue.d.ts
-.vue.js.map
+*.vue.js
+*.vue.d.ts
+*.vue.js.map
