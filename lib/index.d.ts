@@ -23,6 +23,7 @@ export declare function validateNpmPackageName(name: string, throwErr?: boolean)
     user?: string;
     subname?: string;
 };
+export declare const defaultCopyStaticFiles: [string, string, string?][];
 export declare function copyStaticFiles(file_map: Record<string, string> | [string, string, string?][], options: {
     cwd: string;
     staticRoot?: string;

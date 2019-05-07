@@ -157,6 +157,20 @@ export function validateNpmPackageName(name: string, throwErr?: boolean)
 	return ret;
 }
 
+export const defaultCopyStaticFiles = Object.freeze([
+
+	['.npmignore', 'file/npmignore'],
+	['.gitignore', 'file/gitignore'],
+
+	['.nvmrc', 'file/nvmrc'],
+	['.browserslistrc', 'file/browserslistrc'],
+
+	['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
+
+	['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
+
+]) as [string, string, string?][];
+
 export function copyStaticFiles(file_map: Record<string, string> | [string, string, string?][], options: {
 	cwd: string,
 	staticRoot?: string,

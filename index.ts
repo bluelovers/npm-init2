@@ -2,7 +2,7 @@
  * Created by user on 2018/5/14/014.
  */
 
-import findYarnWorkspaceRoot = require('find-yarn-workspace-root');
+import findYarnWorkspaceRoot = require('find-yarn-workspace-root2');
 import yargs = require('yargs');
 import crossSpawn = require('cross-spawn-extra');
 import fs = require('fs-extra');
@@ -11,7 +11,7 @@ import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
 import updateNotifier = require('update-notifier');
 import pkg = require( './package.json' );
-import { copyStaticFiles, getTargetDir } from './lib/index';
+import { copyStaticFiles, defaultCopyStaticFiles, getTargetDir } from './lib/index';
 
 updateNotifier({ pkg }).notify();
 
@@ -246,19 +246,7 @@ if (!cp.error)
 
 		}
 
-		copyStaticFiles([
-
-			['.npmignore', 'file/npmignore'],
-			['.gitignore', 'file/gitignore'],
-
-			['.nvmrc', 'file/nvmrc'],
-			['.browserslistrc', 'file/browserslistrc'],
-
-			['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
-
-			['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
-
-		], {
+		copyStaticFiles(defaultCopyStaticFiles, {
 			cwd: targetDir,
 		});
 
@@ -274,4 +262,8 @@ if (!cp.error)
 		 */
 
 	}
+}
+else
+{
+	process.exitCode = 1;
 }

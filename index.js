@@ -3,7 +3,7 @@
  * Created by user on 2018/5/14/014.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const findYarnWorkspaceRoot = require("find-yarn-workspace-root");
+const findYarnWorkspaceRoot = require("find-yarn-workspace-root2");
 const yargs = require("yargs");
 const crossSpawn = require("cross-spawn-extra");
 const fs = require("fs-extra");
@@ -197,14 +197,7 @@ if (!cp.error) {
         }
         catch (e) {
         }
-        index_1.copyStaticFiles([
-            ['.npmignore', 'file/npmignore'],
-            ['.gitignore', 'file/gitignore'],
-            ['.nvmrc', 'file/nvmrc'],
-            ['.browserslistrc', 'file/browserslistrc'],
-            ['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
-            ['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
-        ], {
+        index_1.copyStaticFiles(index_1.defaultCopyStaticFiles, {
             cwd: targetDir,
         });
         /*
@@ -218,5 +211,8 @@ if (!cp.error) {
         }
          */
     }
+}
+else {
+    process.exitCode = 1;
 }
 //# sourceMappingURL=index.js.map
