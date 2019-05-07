@@ -256,8 +256,6 @@ if (!cp.error)
 
 			['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
 
-			['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
-
 			['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
 
 		], {
