@@ -166,6 +166,22 @@ if (!cp.error) {
         if (pkg.data.name && /^@/.test(pkg.data.name) && !pkg.data.publishConfig) {
             //pkg.data.publishConfig = {};
         }
+        if (!pkg.data.scripts) {
+            pkg.data.scripts = {};
+        }
+        Object
+            .entries({
+            "ncu": "npx npm-check-updates -u",
+            "sort-package-json": "npx sort-package-json ./package.json",
+            "prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
+            "coverage": "npx nyc npm run test",
+            "test": "echo \"Error: no test specified\" && exit 1",
+        })
+            .forEach(([k, v]) => {
+            if (pkg.data.scripts[k] == null) {
+                pkg.data.scripts[k] = v;
+            }
+        });
         pkg.autofix();
         if (cli.argv.sort) {
             pkg.sort();
@@ -181,11 +197,27 @@ if (!cp.error) {
         }
         catch (e) {
         }
+        index_1.copyStaticFiles([
+            ['.npmignore', 'file/npmignore'],
+            ['.gitignore', 'file/gitignore'],
+            ['.nvmrc', 'file/nvmrc'],
+            ['.browserslistrc', 'file/browserslistrc'],
+            ['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
+            ['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
+            ['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
+        ], {
+            cwd: targetDir,
+        });
+        /*
         fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), copyOptions);
+
         fs.copySync(path.join(__dirname, 'lib/file/gitignore'), path.join(targetDir, '.gitignore'), copyOptions);
-        if (!fs.pathExistsSync(path.join(targetDir, 'tsconfig.json'))) {
+
+        if (!fs.pathExistsSync(path.join(targetDir, 'tsconfig.json')))
+        {
             fs.copySync(path.join(__dirname, 'lib/file/tsconfig.json.tpl'), path.join(targetDir, 'tsconfig.json.tpl'), copyOptions);
         }
+         */
     }
 }
 //# sourceMappingURL=index.js.map

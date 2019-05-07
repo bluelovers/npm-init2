@@ -3,15 +3,15 @@
  */
 
 import findYarnWorkspaceRoot = require('find-yarn-workspace-root');
-import yargs  = require('yargs');
+import yargs = require('yargs');
 import crossSpawn = require('cross-spawn-extra');
 import fs = require('fs-extra');
-import path  = require('path');
+import path = require('path');
 import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
 import updateNotifier = require('update-notifier');
 import pkg = require( './package.json' );
-import { getTargetDir } from './lib/index';
+import { copyStaticFiles, getTargetDir } from './lib/index';
 
 updateNotifier({ pkg }).notify();
 
@@ -200,6 +200,28 @@ if (!cp.error)
 			//pkg.data.publishConfig = {};
 		}
 
+		if (!pkg.data.scripts)
+		{
+			pkg.data.scripts = {};
+		}
+
+		Object
+			.entries({
+				"ncu": "npx npm-check-updates -u",
+				"sort-package-json": "npx sort-package-json ./package.json",
+				"prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
+				"coverage": "npx nyc npm run test",
+				"test": "echo \"Error: no test specified\" && exit 1",
+			})
+			.forEach(([k, v]) =>
+			{
+				if (pkg.data.scripts[k] == null)
+				{
+					pkg.data.scripts[k] = v;
+				}
+			})
+		;
+
 		pkg.autofix();
 
 		if (cli.argv.sort)
@@ -209,7 +231,7 @@ if (!cp.error)
 
 		pkg.writeWhenLoaded();
 
-		let copyOptions = {
+		let copyOptions: fs.CopyOptionsSync = {
 			overwrite: false,
 			preserveTimestamps: true,
 			errorOnExist: false,
@@ -224,6 +246,25 @@ if (!cp.error)
 
 		}
 
+		copyStaticFiles([
+
+			['.npmignore', 'file/npmignore'],
+			['.gitignore', 'file/gitignore'],
+
+			['.nvmrc', 'file/nvmrc'],
+			['.browserslistrc', 'file/browserslistrc'],
+
+			['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
+
+			['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
+
+			['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
+
+		], {
+			cwd: targetDir,
+		});
+
+		/*
 		fs.copySync(path.join(__dirname, 'lib/file/npmignore'), path.join(targetDir, '.npmignore'), copyOptions);
 
 		fs.copySync(path.join(__dirname, 'lib/file/gitignore'), path.join(targetDir, '.gitignore'), copyOptions);
@@ -232,6 +273,7 @@ if (!cp.error)
 		{
 			fs.copySync(path.join(__dirname, 'lib/file/tsconfig.json.tpl'), path.join(targetDir, 'tsconfig.json.tpl'), copyOptions);
 		}
+		 */
 
 	}
 }

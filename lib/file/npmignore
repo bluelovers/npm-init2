@@ -50,3 +50,8 @@ yarn-error.log*
 *.vue.js
 *.vue.d.ts
 *.vue.js.map
+
+.nyc_output
+coverage
+
+/*.tpl

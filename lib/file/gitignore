@@ -71,3 +71,11 @@ yarn-error.log*
 *.vue.js
 *.vue.d.ts
 *.vue.js.map
+
+vue.config.d.ts
+vue.config.js.map
+
+.nyc_output
+coverage
+
+/*.tpl
