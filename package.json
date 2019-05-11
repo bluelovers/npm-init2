@@ -1,6 +1,6 @@
 {
   "name": "npm-init2",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "private": false,
   "description": "a lazy npm init for create new package, support yarn workspace. make we without use `mkdir xxx && cd xxx && [npm|yarn] init` with `npx npm-init2 xxx`",
   "keywords": [
@@ -44,7 +44,7 @@
     "fs-extra": "^7.0.1",
     "json5": "^2.1.0",
     "npm-package-json-loader": "^1.0.4",
-    "update-notifier": "^2.5.0",
+    "update-notifier": "^3.0.0",
     "validate-npm-package-name": "^3.0.0",
     "workspaces-config": "^1.0.2",
     "yargs": "^13.2.2"
