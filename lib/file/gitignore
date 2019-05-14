@@ -62,3 +62,7 @@ coverage
 /*.tpl
 !.forestry
 !.vuepress
+!.github
+!.gitee
+!.gitlab
+.git

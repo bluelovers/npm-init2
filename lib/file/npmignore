@@ -16,6 +16,7 @@ tests
 /~*
 __test__
 __tests__
+node_modules
 /node_modules/
 **/node_modules/
 *.ts
@@ -46,3 +47,6 @@ coverage
 /*.tpl
 webpack.config.js
 vue.config.js
+/jestconfig.json
+/tslint.json
+.git
