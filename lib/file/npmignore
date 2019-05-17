@@ -50,3 +50,10 @@ vue.config.js
 /jestconfig.json
 /tslint.json
 .git
+webpack.*.config.js
+webpack.*.config.d.ts
+webpack.*.config.js.map
+webpack.*.config.ts
+karma.conf.js
+/_config.yml
+intellij-style-guide.xml

@@ -162,6 +162,8 @@ export const defaultCopyStaticFiles = Object.freeze([
 	['.npmignore', 'file/npmignore'],
 	['.gitignore', 'file/gitignore'],
 
+	['.eslintignore', 'file/eslintignore'],
+
 	['.nvmrc', 'file/nvmrc'],
 	['.browserslistrc', 'file/browserslistrc'],
 

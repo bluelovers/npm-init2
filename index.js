@@ -13,59 +13,9 @@ const npm_package_json_loader_1 = require("npm-package-json-loader");
 const updateNotifier = require("update-notifier");
 const pkg = require("./package.json");
 const index_1 = require("./lib/index");
+const yargs_setting_1 = require("./lib/yargs-setting");
 updateNotifier({ pkg }).notify();
-let cli = yargs
-    .default({
-//input: process.cwd(),
-})
-    .option('npmClient', {
-    alias: ['N'],
-    requiresArg: true,
-    normalize: true,
-    description: 'npm, yarn, ...etc',
-    default: 'npm',
-    type: 'string',
-})
-    .option('yes', {
-    alias: ['y'],
-    //		requiresArg: true,
-    //		default: 'npm',
-    type: 'boolean',
-})
-    .option('cwd', {
-    alias: ['C'],
-    requiresArg: true,
-    normalize: true,
-    //		default: process.cwd(),
-    defaultDescription: process.cwd(),
-    type: 'string',
-})
-    .option('skipCheckWorkspace', {
-    alias: ['W'],
-    type: 'boolean',
-})
-    .option('force', {
-    alias: ['f'],
-    type: 'boolean',
-})
-    .option('sort', {
-    type: 'boolean',
-    default: true,
-})
-    .option('private', {
-    alias: ['p'],
-    type: 'boolean',
-})
-    .option('createModule', {
-    alias: ['m'],
-    type: 'string',
-})
-    .option('name', {
-    type: 'string',
-})
-    .option('copyStatic', {
-    type: 'boolean',
-});
+let cli = yargs_setting_1.default(yargs);
 let argv = cli.argv._;
 let cwd = path.resolve(cli.argv.cwd || process.cwd());
 let hasWorkspace;
@@ -138,7 +88,9 @@ else
 fs.ensureDirSync(targetDir);
 let flags = Object.keys(cli.argv)
     .reduce(function (a, f) {
-    if (/^[a-z]$/.test(f) && cli.argv[f]) {
+    if (f === 'silent' || f === 'y' || f === 'yes') {
+    }
+    else if (/^[a-z]$/.test(f) && cli.argv[f]) {
         a.push(f);
     }
     return a;
@@ -148,6 +100,7 @@ let args = [
     'init',
     (flags && '-' + flags),
     cli.argv.createModule,
+    cli.argv.yes && '-y',
 ].filter(v => v);
 //console.log(args);
 let cp = crossSpawn.sync(cli.argv.npmClient, args, {
@@ -187,12 +140,12 @@ if (!cp.error) {
             pkg.sort();
         }
         pkg.writeWhenLoaded();
-        let copyOptions = {
-            overwrite: false,
-            preserveTimestamps: true,
-            errorOnExist: false,
-        };
         try {
+            let copyOptions = {
+                overwrite: false,
+                preserveTimestamps: true,
+                errorOnExist: false,
+            };
             fs.copySync(path.join(__dirname, 'lib/static'), targetDir, copyOptions);
         }
         catch (e) {

@@ -12,62 +12,11 @@ import PackageJsonLoader from 'npm-package-json-loader';
 import updateNotifier = require('update-notifier');
 import pkg = require( './package.json' );
 import { copyStaticFiles, defaultCopyStaticFiles, getTargetDir } from './lib/index';
+import setupToYargs from './lib/yargs-setting';
 
 updateNotifier({ pkg }).notify();
 
-let cli = yargs
-	.default({
-		//input: process.cwd(),
-	})
-	.option('npmClient', {
-		alias: ['N'],
-		requiresArg: true,
-		normalize: true,
-		description: 'npm, yarn, ...etc',
-		default: 'npm',
-		type: 'string',
-	})
-	.option('yes', {
-		alias: ['y'],
-//		requiresArg: true,
-//		default: 'npm',
-		type: 'boolean',
-	})
-	.option('cwd', {
-		alias: ['C'],
-		requiresArg: true,
-		normalize: true,
-//		default: process.cwd(),
-		defaultDescription: process.cwd(),
-		type: 'string',
-	})
-	.option('skipCheckWorkspace', {
-		alias: ['W'],
-		type: 'boolean',
-	})
-	.option('force', {
-		alias: ['f'],
-		type: 'boolean',
-	})
-	.option('sort', {
-		type: 'boolean',
-		default: true,
-	})
-	.option('private', {
-		alias: ['p'],
-		type: 'boolean',
-	})
-	.option('createModule', {
-		alias: ['m'],
-		type: 'string',
-	})
-	.option('name', {
-		type: 'string',
-	})
-	.option('copyStatic', {
-		type: 'boolean',
-	})
-;
+let cli = setupToYargs(yargs);
 
 let argv = cli.argv._;
 
@@ -156,7 +105,11 @@ fs.ensureDirSync(targetDir);
 let flags = Object.keys(cli.argv)
 	.reduce(function (a, f)
 	{
-		if (/^[a-z]$/.test(f) && cli.argv[f])
+		if (f === 'silent' || f === 'y' || f === 'yes')
+		{
+
+		}
+		else if (/^[a-z]$/.test(f) && cli.argv[f])
 		{
 			a.push(f);
 		}
@@ -170,6 +123,7 @@ let args = [
 	'init',
 	(flags && '-' + flags),
 	cli.argv.createModule,
+	cli.argv.yes && '-y',
 ].filter(v => v);
 
 //console.log(args);
@@ -231,14 +185,14 @@ if (!cp.error)
 
 		pkg.writeWhenLoaded();
 
-		let copyOptions: fs.CopyOptionsSync = {
-			overwrite: false,
-			preserveTimestamps: true,
-			errorOnExist: false,
-		};
-
 		try
 		{
+			let copyOptions: fs.CopyOptionsSync = {
+				overwrite: false,
+				preserveTimestamps: true,
+				errorOnExist: false,
+			};
+
 			fs.copySync(path.join(__dirname, 'lib/static'), targetDir, copyOptions);
 		}
 		catch (e)
