@@ -1,6 +1,4 @@
-/**
- * Created by user on 2018/5/14/014.
- */
+#!/usr/bin/env node
 
 import findYarnWorkspaceRoot = require('find-yarn-workspace-root2');
 import yargs = require('yargs');
@@ -161,6 +159,7 @@ if (!cp.error)
 
 		Object
 			.entries({
+				"lint": "eslint .",
 				"ncu": "npx npm-check-updates -u",
 				"sort-package-json": "npx sort-package-json ./package.json",
 				"prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
