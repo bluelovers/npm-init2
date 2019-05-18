@@ -45,14 +45,15 @@
     "@typescript-eslint/prefer-includes": "warn",
     "@typescript-eslint/no-useless-constructor": "warn",
     "@typescript-eslint/interface-name-prefix": [
-      "error",
+      "warn",
       "always"
     ],
     "@typescript-eslint/promise-function-async": [
-      "error",
+      "warn",
       {
         "allowedPromiseNames": [
-          "Thenable"
+          "Thenable",
+          "Bluebird"
         ]
       }
     ],
