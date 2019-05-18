@@ -28,3 +28,4 @@ tests/temp*
 /tsconfig.json.tpl
 !lib/file/tsconfig.json.tpl
 /yarn-error.log
+node_modules

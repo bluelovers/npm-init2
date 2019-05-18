@@ -20,6 +20,7 @@ tests/*.d.ts
 tests/temp*
 tests/**/*.map
 bin/*.d.ts
+bin/**/*.d.ts
 /packages/*/bin/*.d.ts
 /packages/*/test/**/*.js
 /packages/*/test/**/*.d.ts
@@ -66,3 +67,4 @@ coverage
 !.gitee
 !.gitlab
 .git
+

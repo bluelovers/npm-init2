@@ -18,6 +18,8 @@ let cli = setupToYargs(yargs);
 
 let argv = cli.argv._;
 
+//console.dir(cli.argv);
+
 let cwd = path.resolve(cli.argv.cwd || process.cwd());
 
 let hasWorkspace: string;

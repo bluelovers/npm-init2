@@ -5,7 +5,7 @@
 import yargs = require('yargs');
 import { Argv, Omit } from 'yargs';
 
-export function setupToYargs<T extends any>(yargs: Argv<T>)
+export function setupToYargs<T>(yargs: Argv<T>)
 {
 	return yargs
 		.default({

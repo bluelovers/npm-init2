@@ -3,7 +3,7 @@
  */
 import yargs = require('yargs');
 import { Argv } from 'yargs';
-export declare function setupToYargs<T extends any>(yargs: Argv<T>): yargs.Argv<yargs.Omit<yargs.Omit<T, never>, "npmClient"> & {
+export declare function setupToYargs<T>(yargs: Argv<T>): yargs.Argv<yargs.Omit<T, never> & {
     npmClient: string;
 } & {
     yes: boolean;
