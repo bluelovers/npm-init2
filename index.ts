@@ -161,8 +161,8 @@ if (!cp.error)
 
 		Object
 			.entries({
-				"lint": "eslint .",
-				"ncu": "npx npm-check-updates -u",
+				"lint": "npx eslint **/*.ts",
+				"ncu": "npx yarn-tool ncu -u",
 				"sort-package-json": "npx sort-package-json ./package.json",
 				"prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
 				"coverage": "npx nyc npm run test",
