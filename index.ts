@@ -165,7 +165,7 @@ if (!cp.error)
 				"ncu": "npx yarn-tool ncu -u",
 				"sort-package-json": "npx sort-package-json ./package.json",
 				"prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
-				"postpublish": "git commit -m \"publish new version\" .",
+				"postpublish": "git commit -m 'publish new version' .",
 				"coverage": "npx nyc npm run test",
 				"test": "echo \"Error: no test specified\" && exit 1",
 			})
