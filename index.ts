@@ -7,12 +7,14 @@ import fs = require('fs-extra');
 import path = require('path');
 import getConfig, { parseStaticPackagesPaths } from 'workspaces-config';
 import PackageJsonLoader from 'npm-package-json-loader';
-import updateNotifier = require('update-notifier');
+import { updateNotifier } from '@yarn-tool/update-notifier';
 import pkg = require( './package.json' );
 import { copyStaticFiles, defaultCopyStaticFiles, getTargetDir } from './lib/index';
 import setupToYargs from './lib/yargs-setting';
+import { findRoot } from '@yarn-tool/find-root';
+import { npmHostedGitInfo } from '@yarn-tool/pkg-git-info';
 
-updateNotifier({ pkg }).notify();
+//updateNotifier(__dirname);
 
 let cli = setupToYargs(yargs);
 
@@ -22,12 +24,12 @@ let argv = cli.argv._;
 
 let cwd = path.resolve(cli.argv.cwd || process.cwd());
 
-let hasWorkspace: string;
+let rootData = findRoot({
+	cwd,
+	skipCheckWorkspace: cli.argv.skipCheckWorkspace,
+});
 
-if (!cli.argv.skipCheckWorkspace)
-{
-	hasWorkspace = findYarnWorkspaceRoot(cwd);
-}
+let hasWorkspace: string = rootData.ws;
 
 let workspacePrefix: string;
 
@@ -48,57 +50,6 @@ let { targetDir, targetName } = getTargetDir({
 	hasWorkspace,
 	workspacePrefix,
 });
-
-/*
-
-let targetDir: string;
-let targetName: string = cli.argv.name || null;
-
-if (argv.length)
-{
-	let name: string = argv[0];
-
-	if (/^(?:@([^/]+?)[/])([^/]+)$/i.test(name))
-	{
-		targetName = targetName || name;
-		name = name
-			.replace(/[\/\\]+/g, '_')
-			.replace(/^@/g, '')
-		;
-	}
-	else if (/^[^/@]+$/i.test(name))
-	{
-		targetName = targetName || null;
-	}
-	else
-	{
-		targetName = targetName || null;
-	}
-
-	if (hasWorkspace)
-	{
-		let ws = parseStaticPackagesPaths(getConfig(hasWorkspace));
-
-		if (ws.prefix.length)
-		{
-			name = path.join(hasWorkspace, ws.prefix[0], name);
-		}
-		else
-		{
-			throw new RangeError();
-		}
-	}
-
-	targetDir = path.resolve(name);
-}
-else
-{
-	targetDir = cwd;
-}
-
-*/
-
-//console.log(targetDir);
 
 fs.ensureDirSync(targetDir);
 
@@ -128,6 +79,22 @@ let args = [
 
 //console.log(args);
 
+let old_pkg_name: string;
+
+if (cli.argv.yes && !targetName)
+{
+	try
+	{
+		let pkg = new PackageJsonLoader(path.join(targetDir, 'package.json'));
+
+		old_pkg_name = pkg.data.name
+	}
+	catch (e)
+	{
+
+	}
+}
+
 let cp = crossSpawn.sync(cli.argv.npmClient, args, {
 	stdio: 'inherit',
 	cwd: targetDir,
@@ -148,6 +115,10 @@ if (!cp.error)
 		{
 			pkg.data.name = targetName;
 		}
+		else if (cli.argv.yes && old_pkg_name && pkg.data.name != old_pkg_name)
+		{
+			pkg.data.name = old_pkg_name;
+		}
 
 		if (pkg.data.name && /^@/.test(pkg.data.name) && !pkg.data.publishConfig)
 		{
@@ -159,13 +130,37 @@ if (!cp.error)
 			pkg.data.scripts = {};
 		}
 
+		if (!pkg.data.homepage || !pkg.data.bugs || !pkg.data.repository)
+		{
+			try
+			{
+				let info = npmHostedGitInfo(targetDir)
+
+				// @ts-ignore
+				pkg.data.homepage = pkg.data.homepage || info.homepage
+
+				pkg.data.bugs = pkg.data.bugs || {
+					url: info.bugs,
+				}
+
+				pkg.data.repository = pkg.data.repository || {
+					"type": "git",
+					url: info.repository,
+				}
+			}
+			catch (e)
+			{
+
+			}
+		}
+
 		Object
 			.entries({
 				"lint": "npx eslint **/*.ts",
 				"ncu": "npx yarn-tool ncu -u",
 				"sort-package-json": "npx sort-package-json ./package.json",
 				"prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
-				"postpublish": "git commit -m 'publish new version' .",
+				"postpublish": `git commit -m "publish new version" .`,
 				"coverage": "npx nyc npm run test",
 				"test": "echo \"Error: no test specified\" && exit 1",
 			})
