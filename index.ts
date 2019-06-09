@@ -180,7 +180,7 @@ if (!cp.error)
 			pkg.sort();
 		}
 
-		pkg.writeWhenLoaded();
+		pkg.writeOnlyWhenLoaded();
 
 		try
 		{
