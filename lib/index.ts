@@ -9,6 +9,8 @@ import _validateNpmPackageName = require('validate-npm-package-name');
 import fs = require('fs-extra');
 import path = require('path');
 
+import _copyStaticFiles, { defaultCopyStaticFiles } from '@yarn-tool/static-file';
+
 export function npmVersion(npmClient?: string, cwd?: string)
 {
 	let args = [
@@ -157,21 +159,7 @@ export function validateNpmPackageName(name: string, throwErr?: boolean)
 	return ret;
 }
 
-export const defaultCopyStaticFiles = Object.freeze([
-
-	['.npmignore', 'file/npmignore'],
-	['.gitignore', 'file/gitignore'],
-
-	['.eslintignore', 'file/eslintignore'],
-
-	['.nvmrc', 'file/nvmrc'],
-	['.browserslistrc', 'file/browserslistrc'],
-
-	['tsconfig.json.tpl', 'file/tsconfig.json.tpl', 'tsconfig.json'],
-
-	['.eslintrc.json.tpl', 'file/eslintrc.json.tpl', '.eslintrc.json'],
-
-]) as [string, string, string?][];
+export { defaultCopyStaticFiles }
 
 export function copyStaticFiles(file_map: Record<string, string> | [string, string, string?][], options: {
 	cwd: string,
@@ -179,65 +167,8 @@ export function copyStaticFiles(file_map: Record<string, string> | [string, stri
 	overwrite?: boolean,
 })
 {
-	if (!options.cwd || typeof options.cwd != 'string')
-	{
-		throw new TypeError(`options.cwd must is string`)
-	}
-
-	if (!fs.pathExistsSync(options.cwd))
-	{
-		throw new TypeError(`options.cwd not exists`)
-	}
-
-	let copyOptions: fs.CopyOptionsSync = {
-		overwrite: options.overwrite || false,
-		preserveTimestamps: true,
-		errorOnExist: false,
-	};
-
-	const { cwd } = options;
-	const staticRoot = options.staticRoot || __dirname;
-
-	let ls: string[][];
-
-	if (Array.isArray(file_map))
-	{
-		ls = Object.values(file_map)
-	}
-	else
-	{
-		ls = Object.entries(file_map)
-	}
-
-	ls = ls.filter(v => v && Array.isArray(v) && v.length > 1);
-
-	if (!ls.length)
-	{
-		throw new TypeError(`file_map is not file map`)
-	}
-
-	ls
-		.forEach(function ([a, b, c])
-		{
-			let fa = path.join(cwd, a);
-			let fb = path.join(staticRoot, b);
-
-			if (c != null)
-			{
-				let fc = path.join(cwd, c);
-
-				if (fs.existsSync(fc))
-				{
-					return;
-				}
-			}
-
-			if (!fs.existsSync(fb))
-			{
-				throw new Error(`file not exists. ${fb}`)
-			}
-
-			fs.copySync(fb, fa, copyOptions);
-		})
-	;
+	return _copyStaticFiles({
+		...options,
+		file_map,
+	});
 }

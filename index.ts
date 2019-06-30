@@ -158,10 +158,13 @@ if (!cp.error)
 			.entries({
 				"lint": "npx eslint **/*.ts",
 				"ncu": "npx yarn-tool ncu -u",
+				"npm:publish": "npm publish",
+				"tsc:default": "tsc -p tsconfig.json",
+				"tsc:esm": "tsc -p tsconfig.esm.json",
 				"sort-package-json": "npx sort-package-json ./package.json",
-				"prepublishOnly": "npm run ncu && npm run sort-package-json && npm run test",
+				"prepublishOnly": "yarn run ncu && yarn run sort-package-json && yarn run test",
 				"postpublish": `git commit -m "publish new version" .`,
-				"coverage": "npx nyc npm run test",
+				"coverage": "npx nyc yarn run test",
 				"test": "echo \"Error: no test specified\" && exit 1",
 			})
 			.forEach(([k, v]) =>
