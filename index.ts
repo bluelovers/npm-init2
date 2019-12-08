@@ -162,8 +162,8 @@ if (!cp.error)
 				"tsc:default": "tsc -p tsconfig.json",
 				"tsc:esm": "tsc -p tsconfig.esm.json",
 				"sort-package-json": "npx sort-package-json ./package.json",
-				"prepublishOnly": "yarn run ncu && yarn run sort-package-json && yarn run test",
-				"postpublish": `git commit -m "publish new version" .`,
+				"prepublishOnly_": "yarn run ncu && yarn run sort-package-json && yarn run test",
+				"postpublish_": `git commit -m "publish new version" .`,
 				"coverage": "npx nyc yarn run test",
 				"test": "echo \"Error: no test specified\" && exit 1",
 			})
