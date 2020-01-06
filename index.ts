@@ -139,6 +139,16 @@ if (!cp.error)
 				// @ts-ignore
 				pkg.data.homepage = pkg.data.homepage || info.homepage
 
+				if (hasWorkspace)
+				{
+					let u = new URL(pkg.data.homepage as string);
+
+					u.pathname += '/' + pkg.data.name;
+
+					// @ts-ignore
+					pkg.data.homepage = u.toString();
+				}
+
 				pkg.data.bugs = pkg.data.bugs || {
 					url: info.bugs,
 				}
