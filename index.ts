@@ -166,6 +166,8 @@ if (!cp.error)
 
 		Object
 			.entries({
+				"test:mocha": "npx mocha --require ts-node/register \"!(node_modules)/**/*.{test,spec}.{ts,tsx}\"",
+				"prepublish:lockfile": "npx sync-lockfile .",
 				"lint": "npx eslint **/*.ts",
 				"ncu": "npx yarn-tool ncu -u",
 				"npm:publish": "npm publish",

@@ -67,4 +67,5 @@ coverage
 !.gitee
 !.gitlab
 .git
-
+/.eslintignore
+/package.d.ts
