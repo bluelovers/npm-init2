@@ -119,6 +119,11 @@ if (!cp.error)
 		{
 			pkg.data.name = old_pkg_name;
 		}
+		// 防止 node- 被 npm 移除
+		else if (!cli.argv.yes && old_pkg_name && /^node-/.test(old_pkg_name) && ('node-' + pkg.data.name) === old_pkg_name)
+		{
+			pkg.data.name = old_pkg_name;
+		}
 
 		if (pkg.data.name && /^@/.test(pkg.data.name) && !pkg.data.publishConfig)
 		{
