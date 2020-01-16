@@ -178,7 +178,7 @@ if (!cp.error)
 				"npm:publish": "npm publish",
 				"tsc:default": "tsc -p tsconfig.json",
 				"tsc:esm": "tsc -p tsconfig.esm.json",
-				"sort-package-json": "npx sort-package-json ./package.json",
+				"sort-package-json": "npx yarn-tool sort",
 				"prepublishOnly_": "yarn run ncu && yarn run sort-package-json && yarn run test",
 				"postpublish_": `git commit -m "publish new version" .`,
 				"coverage": "npx nyc yarn run test",
