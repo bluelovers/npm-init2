@@ -139,7 +139,7 @@ if (!cp.error)
 		{
 			try
 			{
-				let info = npmHostedGitInfo(targetDir)
+				let info = npmHostedGitInfo(targetDir);
 
 				// @ts-ignore
 				pkg.data.homepage = pkg.data.homepage || info.homepage
@@ -148,7 +148,7 @@ if (!cp.error)
 				{
 					let u = new URL(pkg.data.homepage as string);
 
-					u.pathname += '/' + pkg.data.name;
+					u.pathname += '/' + path.relative(hasWorkspace, targetDir);
 
 					// @ts-ignore
 					pkg.data.homepage = u.toString();
