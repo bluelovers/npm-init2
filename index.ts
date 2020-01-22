@@ -148,7 +148,7 @@ if (!cp.error)
 				{
 					let u = new URL(pkg.data.homepage as string);
 
-					u.pathname += '/' + path.relative(hasWorkspace, targetDir);
+					u.pathname += '/tree/master/' + path.relative(hasWorkspace, targetDir);
 
 					// @ts-ignore
 					pkg.data.homepage = u.toString();
