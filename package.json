@@ -1,6 +1,6 @@
 {
   "name": "npm-init2",
-  "version": "1.0.45",
+  "version": "1.0.46",
   "private": false,
   "description": "a lazy npm init for create new package, support yarn workspace. make we without use `mkdir xxx && cd xxx && [npm|yarn] init` with `npx npm-init2 xxx`",
   "keywords": [
@@ -35,8 +35,8 @@
     "ncu": "npx yarn-tool ncu -u",
     "npm:publish": "npm publish",
     "prebuild:lockfile": "npx sync-lockfile .",
-    "prepublishOnly": "npm run ncu && npm run sort-package-json",
-    "postpublish": "git commit -m \"publish new version\" .",
+    "prepublishOnly": "yarn run ncu && yarn run sort-package-json",
+    "postpublish": "git commit -m \"chore(release): publish\" .",
     "sort-package-json": "npx yarn-tool sort",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
