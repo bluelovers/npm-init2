@@ -80,6 +80,7 @@ let args = [
 //console.log(args);
 
 let old_pkg_name: string;
+let oldExists = fs.existsSync(path.join(targetDir, 'package.json'));
 
 if (cli.argv.yes && !targetName)
 {
@@ -193,7 +194,7 @@ if (!cp.error)
 			})
 		;
 
-		if (!old_pkg_name)
+		if (!oldExists)
 		{
 			pkg.data.devDependencies = pkg.data.devDependencies || {};
 
