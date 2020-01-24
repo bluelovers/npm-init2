@@ -193,6 +193,16 @@ if (!cp.error)
 			})
 		;
 
+		if (!old_pkg_name)
+		{
+			pkg.data.devDependencies = pkg.data.devDependencies || {};
+
+			if (!pkg.data.devDependencies['@bluelovers/tsconfig'])
+			{
+				pkg.data.devDependencies['@bluelovers/tsconfig'] = "latest";
+			}
+		}
+
 		pkg.autofix();
 
 		if (cli.argv.sort)
