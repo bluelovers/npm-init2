@@ -201,6 +201,7 @@ if (!cp.error)
 			if (!pkg.data.devDependencies['@bluelovers/tsconfig'])
 			{
 				pkg.data.devDependencies['@bluelovers/tsconfig'] = "latest";
+				pkg.data.devDependencies['@types/node'] = "latest";
 			}
 		}
 

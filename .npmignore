@@ -32,3 +32,5 @@ test
 /tsconfig.json.tpl
 !lib/static/tsconfig.json.tpl
 /yarn-error.log
+/package-lock.json
+/yarn.lock
