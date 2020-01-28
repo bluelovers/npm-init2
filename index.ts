@@ -196,13 +196,17 @@ if (!cp.error)
 
 		if (!oldExists)
 		{
+			const cpkg = require('./package.json');
+
+			const findVersion = (name: string) =>
+			{
+				return cpkg.dependencies[name] || cpkg.devDependencies[name] || cpkg.peerDependencies[name] || "latest"
+			};
+
 			pkg.data.devDependencies = pkg.data.devDependencies || {};
 
-			if (!pkg.data.devDependencies['@bluelovers/tsconfig'])
-			{
-				pkg.data.devDependencies['@bluelovers/tsconfig'] = "latest";
-				pkg.data.devDependencies['@types/node'] = "latest";
-			}
+			pkg.data.devDependencies['@bluelovers/tsconfig'] = findVersion('@bluelovers/tsconfig');
+			pkg.data.devDependencies['@types/node'] = findVersion('@types/node');
 		}
 
 		pkg.autofix();
