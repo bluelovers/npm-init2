@@ -82,7 +82,7 @@ let args = [
 let old_pkg_name: string;
 let oldExists = fs.existsSync(path.join(targetDir, 'package.json'));
 
-if (cli.argv.yes && !targetName)
+if (!targetName)
 {
 	try
 	{
@@ -112,18 +112,18 @@ if (!cp.error)
 			pkg.data.private = true;
 		}
 
-		if (targetName && pkg.data.name != targetName)
+		// 防止 node- 被 npm 移除
+		if (!cli.argv.yes && old_pkg_name && /^node-/.test(old_pkg_name) && ('node-' + pkg.data.name) === old_pkg_name)
 		{
-			pkg.data.name = targetName;
+			pkg.data.name = old_pkg_name;
 		}
 		else if (cli.argv.yes && old_pkg_name && pkg.data.name != old_pkg_name)
 		{
 			pkg.data.name = old_pkg_name;
 		}
-		// 防止 node- 被 npm 移除
-		else if (!cli.argv.yes && old_pkg_name && /^node-/.test(old_pkg_name) && ('node-' + pkg.data.name) === old_pkg_name)
+		else if (targetName && pkg.data.name != targetName)
 		{
-			pkg.data.name = old_pkg_name;
+			pkg.data.name = targetName;
 		}
 
 		if (pkg.data.name && /^@/.test(pkg.data.name) && !pkg.data.publishConfig)
